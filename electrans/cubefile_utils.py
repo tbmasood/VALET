@@ -23,7 +23,7 @@ class CubefileData:
 def load_cubefile(input_file: str):
     from pathlib import Path
     import numpy
-    import electrans.atomic_data as atomic_data
+    from . import atomic_data as atomic_data
 
     filePath = Path(input_file)
     if filePath.suffix == ".xz":

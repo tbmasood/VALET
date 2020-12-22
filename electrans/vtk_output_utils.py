@@ -18,21 +18,27 @@ def write_segmentation(output_file, segment_array, basis, array_name="density"):
     writer.Write()
 
 
-def write_atoms(output_file, atoms, atomic_charges):
+def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgroup_map):
     import vtk
     import numpy
-    import electrans.atomic_data as atomic_data
+    from . import atomic_data as atomic_data
 
     pointsArr = vtk.vtkPoints()
     atomTypesArr = vtk.vtkIntArray()
-    atomTypesArr.SetName("atomType")
+    atomTypesArr.SetName("atom_type")
     atomRadiusArr = vtk.vtkFloatArray()
-    atomRadiusArr.SetName("atomRadius")
+    atomRadiusArr.SetName("atom_radius")
     atomColorArr = vtk.vtkFloatArray()
-    atomColorArr.SetName("atomColor")
+    atomColorArr.SetName("atom_color")
     atomColorArr.SetNumberOfComponents(3)
-    atomChargeArr = vtk.vtkFloatArray()
-    atomChargeArr.SetName("charge")
+    atomHoleChargeArr = vtk.vtkFloatArray()
+    atomHoleChargeArr.SetName("hole_charge")
+    atomParticleChargeArr = vtk.vtkFloatArray()
+    atomParticleChargeArr.SetName("particle_charge")
+    atomChargeDiffArr = vtk.vtkFloatArray()
+    atomChargeDiffArr.SetName("charge_diff")
+    atomSubgroupArr = vtk.vtkIntArray()
+    atomSubgroupArr.SetName("subgroup")
     for atom in atoms:
         x = atom.coordinates[0]
         y = atom.coordinates[1]
@@ -43,7 +49,10 @@ def write_atoms(output_file, atoms, atomic_charges):
         atomRadiusArr.InsertNextTuple1(radius)
         color = atomic_data.color(atomic_data.atomic_symbol(atom.atomic_number))
         atomColorArr.InsertNextTuple3(color[0], color[1], color[2])
-        atomChargeArr.InsertNextTuple1(atomic_charges[atom.id])
+        atomHoleChargeArr.InsertNextTuple1(hole_charges[atom.id])
+        atomParticleChargeArr.InsertNextTuple1(particle_charges[atom.id])
+        atomChargeDiffArr.InsertNextTuple1(particle_charges[atom.id] - hole_charges[atom.id])
+        atomSubgroupArr.InsertNextTuple1(atom_subgroup_map[atom.id])
 
     # Add bonds
     bondsArr = vtk.vtkCellArray()
@@ -73,7 +82,10 @@ def write_atoms(output_file, atoms, atomic_charges):
     polydata.GetPointData().AddArray(atomTypesArr)
     polydata.GetPointData().AddArray(atomRadiusArr)
     polydata.GetPointData().AddArray(atomColorArr)
-    polydata.GetPointData().AddArray(atomChargeArr)
+    polydata.GetPointData().AddArray(atomHoleChargeArr)
+    polydata.GetPointData().AddArray(atomParticleChargeArr)
+    polydata.GetPointData().AddArray(atomChargeDiffArr)
+    polydata.GetPointData().AddArray(atomSubgroupArr)
     polydata.Modified()
 
     writer = vtk.vtkXMLPolyDataWriter()
@@ -139,7 +151,7 @@ def write_segments(output_file, segment_array, basis, atoms):
     writer.Write()
 
 
-def write_subgroup_segments(output_file, segment_array, basis, atoms, ligands):
+def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgroups, atom_subgroup_map):
     import vtk
     import numpy
     from vtk.numpy_interface import dataset_adapter as dsa
@@ -168,10 +180,11 @@ def write_subgroup_segments(output_file, segment_array, basis, atoms, ligands):
 
     appendedData = vtk.vtkAppendPolyData()
 
-    for i in range(len(ligands)):
+    for i in range(num_subgroups):
         selected = numpy.zeros(size)
-        for atomID in ligands[i]:
-            selected = selected + numpy.where(segment_array == atomID, mask, 0)
+        for atomID in range(len(atoms)):
+            if atom_subgroup_map[atomID] == i:
+                selected = selected + numpy.where(segment_array == atomID, mask, 0)
 
         selected = gaussian_filter(selected, sigma=0.4)
         selected = selected.flatten('F')

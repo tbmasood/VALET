@@ -5,7 +5,8 @@ class ElectronicTransition:
         self.hole_charges = [0] * hole_data.num_atoms()
         self.particle_charges = [0] * particle_data.num_atoms()
         if hole_data.num_atoms() != particle_data.num_atoms():
-            raise Exception("The number of atoms in Hole and particle cube files are different")
+            raise Exception(
+                "The number of atoms in Hole and particle cube files are different")
 
     def num_atoms(self):
         return self.hole_data.num_atoms()
@@ -15,11 +16,12 @@ class ElectronicTransition:
         sumParticleCharges = sum(self.particle_charges)
         for i in range(self.num_atoms()):
             self.hole_charges[i] = 2.0 * self.hole_charges[i] / sumHoleCharges
-            self.particle_charges[i] = 2.0 * self.particle_charges[i] / sumParticleCharges
+            self.particle_charges[i] = 2.0 * \
+                self.particle_charges[i] / sumParticleCharges
 
 
 def load_transition(hole_cubefile: str, particle_cubefile: str):
-    import electrans.cubefile_utils as cubeFileUtils
+    from . import cubefile_utils as cubeFileUtils
 
     hole_data = cubeFileUtils.load_cubefile(hole_cubefile)
     particle_data = cubeFileUtils.load_cubefile(particle_cubefile)
@@ -109,28 +111,35 @@ def accumulate_atomic_charges(segment_array, scalars, atoms, size):
     return chargePerAtom, atomVolume
 
 
-def compute_atomic_charges(transitions, num_threads=4, same_atomic_positions=True):
+def compute_atomic_charges(transitions, num_threads=4, same_atomic_positions=True, save_segmention=False):
     if (len(transitions) < 0):
         return
     data = transitions[0].hole_data
+    segment_arrays = []
     if same_atomic_positions:
         segment_array = voronoi_segmentation(
             data.basis, data.atoms, data.size, num_threads)
+        if save_segmention:
+            segment_arrays.append(segment_array)
     for transition in transitions:
         data = transition.hole_data
         if not same_atomic_positions:
             segment_array = voronoi_segmentation(
                 data.basis, data.atoms, data.size, num_threads)
+            if save_segmention:
+                segment_arrays.append(segment_array)
         transition.hole_charges, atomVolume = accumulate_atomic_charges(
             segment_array, data.scalars, data.atoms, data.size)
         data = transition.particle_data
         if not same_atomic_positions:
             segment_array = voronoi_segmentation(
                 data.basis, data.atoms, data.size, num_threads)
+            if save_segmention:
+                segment_arrays.append(segment_array)
         transition.particle_charges, atomVolume = accumulate_atomic_charges(
             segment_array, data.scalars, data.atoms, data.size)
         transition.normalize()
-    return segment_array
+    return segment_arrays
 
 
 def read_atomic_charges(file_name):
@@ -155,14 +164,38 @@ def read_atomic_charges(file_name):
         return (hole_charges, particle_charges)
 
 
+def save_atomic_charges(output_file, atoms, hole_charges, particle_charges, subgroup_names, atom_subgroup_map):
+    with open(output_file, 'w') as f:
+        f.write(
+            "ID, Atomic number, Subgroup, Hole charge, Particle charge, Charge difference\n")
+        for i in range(len(atoms)):
+            f.write("%d, %d, %s, %f, %f, %f\n" % (
+                atoms[i].id, atoms[i].atomic_number, subgroup_names[atom_subgroup_map[i]],
+                hole_charges[i], particle_charges[i], particle_charges[i] - hole_charges[i]))
+
+
 def read_metadata_file(csv_file: str):
     fileNames = []
     with open(csv_file, mode='r') as f:
         lines = f.readlines()
         for i in range(1, len(lines)):
             splitted = lines[i].strip().split(",")
-            fileNames.append((splitted[0], splitted[1]))
+            fileNames.append((splitted[0], splitted[1], splitted[2]))
     return fileNames
+
+
+def load_subgroups(file_name: str):
+    with open(file_name) as f:
+        lines = f.readlines()
+        splitted = lines[0].strip().split(",")
+        subgroup_names = []
+        for name in splitted:
+            subgroup_names.append(name.strip())
+        splitted = lines[1].strip().split(",")
+        atom_subgroup_map = []
+        for index in splitted:
+            atom_subgroup_map.append(int(index.strip()))
+        return (subgroup_names, atom_subgroup_map)
 
 
 class SubgroupInfo:
@@ -224,14 +257,16 @@ def _accumulate_subgroup_charges(hole_charges, particle_charges, num_subgroups, 
     ligandESCharges = [0.0] * num_subgroups
     for i in range(len(atom_subgroup_map)):
         subgroupIndex = atom_subgroup_map[i]
-        ligandGSCharges[subgroupIndex] = ligandGSCharges[subgroupIndex] + hole_charges[i] / sumGSCharges
-        ligandESCharges[subgroupIndex] = ligandESCharges[subgroupIndex] + particle_charges[i] / sumESCharges
+        ligandGSCharges[subgroupIndex] = ligandGSCharges[subgroupIndex] + \
+            hole_charges[i] / sumGSCharges
+        ligandESCharges[subgroupIndex] = ligandESCharges[subgroupIndex] + \
+            particle_charges[i] / sumESCharges
     return (ligandGSCharges, ligandESCharges)
 
 
 def compute_subgroup_charges(transition, subgroup_info, use_hueristic=True):
     ligandGSCharges, ligandESCharges = _accumulate_subgroup_charges(transition.hole_charges, transition.particle_charges,
-                                                                  subgroup_info.num_subgroups, subgroup_info.atom_subgroup_map)
+                                                                    subgroup_info.num_subgroups, subgroup_info.atom_subgroup_map)
     subgroup_info.hole_charges = ligandGSCharges
     subgroup_info.particle_charges = ligandESCharges
     if use_hueristic:
@@ -359,7 +394,7 @@ def _distribute_charges_optimize_quadratic(hole_charges, particle_charges):
     return T_complete
 
 
-def create_diagram(subgroup_info, title=""):
+def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, file_name="diagram.pdf"):
 
     WIDTH = 700
     HEIGHT = 700
@@ -483,4 +518,7 @@ def create_diagram(subgroup_info, title=""):
     plt.axis('equal')
     plt.axis('off')
     plt.tight_layout()
-    plt.show()
+    if show_plot:
+        plt.show()
+    if save_plot:
+        plt.savefig(file_name, bbox_inches='tight')
