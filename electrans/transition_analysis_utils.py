@@ -403,8 +403,8 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
     BAR_THICKNESS = 0.04
     GAP = 0.035
     FLOW_GAP = 0.0
-    TEXT_GAP = 0.07
-    TITLE_GAP = 0.03
+    TEXT_GAP = 0.06
+    TITLE_GAP = 0.12
 
     import matplotlib.pyplot as plt
     import matplotlib.path as mpath
@@ -431,19 +431,19 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
     topY = HEIGHT - topPadding - textHeight - titleHeight - barHeight
 
     plt.text(WIDTH / 2, HEIGHT - titleHeight, title,
-             ha="center", family="serif", size=20)
+             ha="center", family="serif", size=16)
 
     for i in range(subgroup_info.num_subgroups):
         x = leftPadding + total * availableWidth + i * GAP * WIDTH
         barWidth = subgroup_info.particle_charges[i] * availableWidth
 
         percent = "%.2f%%" % (subgroup_info.particle_charges[i] * 100)
-        plt.text(x + barWidth / 2, topY + 4 + barHeight,
+        plt.text(x + barWidth / 2, topY + 6 + barHeight,
                  subgroup_info.subgroup_names[i], ha="center", family="sans-serif", size=10)
-        plt.text(x + barWidth / 2, topY + 24 + barHeight, percent,
+        plt.text(x + barWidth / 2, topY + 28 + barHeight, percent,
                  ha="center", family="monospace", size=10)
         rect = mpatches.Rectangle(
-            [x, topY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black")
+            [x, topY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black", lw=0.5)
         ax.add_patch(rect)
 
         xCoordsES[i] = x
@@ -459,12 +459,12 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
         barWidth = subgroup_info.hole_charges[i] * availableWidth
 
         percent = "%.2f%%" % (subgroup_info.hole_charges[i] * 100)
-        plt.text(x + barWidth / 2, bottomY - 20,
+        plt.text(x + barWidth / 2, bottomY - 22,
                  subgroup_info.subgroup_names[i], ha="center", family="sans-serif", size=10)
-        plt.text(x + barWidth / 2, bottomY - 40, percent,
+        plt.text(x + barWidth / 2, bottomY - 44, percent,
                  ha="center", family="monospace", size=10)
         rect = mpatches.Rectangle(
-            [x, bottomY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black")
+            [x, bottomY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black", lw=0.5)
         ax.add_patch(rect)
 
         xCoordsGS[i] = x

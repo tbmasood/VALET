@@ -141,6 +141,7 @@ def main():
             atom_subgroup_map = [0] * transitions[0].num_atoms()
 
     for i in range(len(transitions)):
+        transition = transitions[i]
         if output_atomic_charges:
             output_file = input_dir + "results/atomic_charges/" + \
                 "%s.csv" % transition_names[i]
