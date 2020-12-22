@@ -1,5 +1,6 @@
 from electrans import transition_analysis_utils as tau
 
+
 def test_example():
     hole_cubeFile = "./data/tq-td_State1-GS.cube"
     particle_cubeFile = "./data/tq-td_State1-ES.cube"
@@ -9,9 +10,9 @@ def test_example():
     print("Loaded the hole and particle cube files ...")
 
     # Compute the weighted Voronoi diagram and accumulate charges for each atom
-    segment_array = tau.compute_atomic_charges([transition])
+    segment_arrays = tau.compute_atomic_charges([transition], save_segmention=True)
     print("Compted the Voronoi diagram based segmentation and atomic charges ...")
-    
+
     # Provide the grouping of atoms in meaningful subgroups
     subgroup_names = ["THIO", "QUIN"]
     atom_subgroup_map = [-1] * transition.num_atoms()
@@ -20,11 +21,11 @@ def test_example():
     atom_subgroup_map[8:] = [1] * (transition.num_atoms() - 8)
     subgroup_info = tau.SubgroupInfo()
     subgroup_info.set_subgroups(subgroup_names, atom_subgroup_map)
-    
+
     # Compute the charges and the amount of charge transfer between subgroups
     tau.compute_subgroup_charges(transition, subgroup_info)
     print("Compted subgroup charges and charge trasfer ...")
-    
+
     # Generate and plot the Transition Diagram
     tau.create_diagram(subgroup_info, title="TQ (State 1)")
 
@@ -33,18 +34,19 @@ def test_example():
 
     data = transition.hole_data
     vtk_out.write_segmentation("dens_0_GS.vti", data.scalars, data.basis)
-    vtk_out.write_segmentation("dens_0_ES.vti", transition.particle_data.scalars, data.basis)
-    vtk_out.write_atoms("atoms_0_GS.vtp", data.atoms, transition.hole_charges)
-    vtk_out.write_atoms("atoms_0_ES.vtp", data.atoms, transition.particle_charges)
-    chargeDiff = [0] * data.num_atoms()
-    for atomID in range(data.num_atoms()):
-        chargeDiff[atomID] = transition.particle_charges[atomID] - transition.hole_charges[atomID]
-    vtk_out.write_atoms("atoms_0_diff.vtp", data.atoms, chargeDiff)
-    vtk_out.write_segmentation("seg.vti", segment_array, data.basis, array_name="segment")
-    vtk_out.write_segments("seg.vtp", segment_array, data.basis, data.atoms)
-    vtk_out.write_subgroup_segments("seg_ligands.vtp", segment_array, data.basis, data.atoms, [range(8), range(8, data.num_atoms())])
+    vtk_out.write_segmentation(
+        "dens_0_ES.vti", transition.particle_data.scalars, data.basis)
+    vtk_out.write_atoms("atoms.vtp", data.atoms, transition.hole_charges,
+                        transition.particle_charges, atom_subgroup_map)
+    vtk_out.write_segmentation(
+        "seg.vti", segment_arrays[0], data.basis, array_name="segment")
+    vtk_out.write_segments(
+        "seg.vtp", segment_arrays[0], data.basis, data.atoms)
+    vtk_out.write_subgroup_segments("seg_ligands.vtp", segment_arrays[0], data.basis, data.atoms, len(
+        subgroup_names), atom_subgroup_map)
 
     print("All output VTK files written to disk ...")
+
 
 if __name__ == "__main__":
     test_example()
