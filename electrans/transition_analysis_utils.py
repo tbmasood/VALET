@@ -443,7 +443,7 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
         plt.text(x + barWidth / 2, topY + 28 + barHeight, percent,
                  ha="center", family="monospace", size=10)
         rect = mpatches.Rectangle(
-            [x, topY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black", lw=0.5)
+            [x, topY], barWidth, barHeight, facecolor=colors[i % len(colors)], ec="black", lw=0.5)
         ax.add_patch(rect)
 
         xCoordsES[i] = x
@@ -464,7 +464,7 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
         plt.text(x + barWidth / 2, bottomY - 44, percent,
                  ha="center", family="monospace", size=10)
         rect = mpatches.Rectangle(
-            [x, bottomY], barWidth, barHeight, faceColor=colors[i % len(colors)], ec="black", lw=0.5)
+            [x, bottomY], barWidth, barHeight, facecolor=colors[i % len(colors)], ec="black", lw=0.5)
         ax.add_patch(rect)
 
         xCoordsGS[i] = x
@@ -509,7 +509,7 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
             codes, verts = zip(*path_data)
             path = mpath.Path(verts, codes)
             patch = mpatches.PathPatch(
-                path, faceColor=colors[i % len(colors)], alpha=0.4, ec="none")
+                path, facecolor=colors[i % len(colors)], alpha=0.4, ec="none")
             ax.add_patch(patch)
 
             propoFilledGS[i] = propoFilledGS[i] + flow
