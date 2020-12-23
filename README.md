@@ -6,18 +6,19 @@ A python library for analysis of natural transition orbitals of molecules and mo
 TODO
 
 # Use as a python package
-After installation, the whole package can be imported in your python scripts using the command `import electrans`. However, in most cases only `from electrans import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams . See [`test_electrans.py`](blob/main/test_electrans.py) for an example use case.
+After installation, the whole package can be imported in your python scripts using the command `import electrans`. However, in most cases only `from electrans import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams . See [`test_electrans.py`](test_electrans.py) for an example use case.
 
 # Using through Jupyter notebook
-The package can also be imported in a Jupyter lab and notebook. See [`plot_transition_diagram.ipynb`](blob/main/plot_transition_diagram.ipynb) for an example use case. 
+The package can also be imported in a Jupyter lab and notebook. See [`plot_transition_diagram.ipynb`](plot_transition_diagram.ipynb) for an example use case. 
 
 # Command line execution
 After installation, the library can also be executed from command line as follows:
+
 `
 electrans [-h] [-p] [-q] [-d] [-a] [-s] [-av] [-sv] [-t THREADS] input_dir
 `
 
-### positional arguments:
+### Positional arguments:
 |Argument | Description|
 |---|---|
 | input_dir | The directory containing the input cube files for transitions. The directory should a 'metadata.csv' file which contains 3 columns. The first specifies the name of the transition. The second and third columns specify hole and particle cube files respectively.|
