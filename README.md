@@ -3,7 +3,48 @@
 A python library for analysis of Natural Transition Orbitals (NTO) of molecules and molecular complexes. It supports computing electronic charges and charge transfer during electronic transitions at atomic as well as at subgroup level.
 
 # Installation
-TODO
+
+Since this library is currently under developemnt, I recommend using a virtual environment to install this package and its dependencies. You can use environments like `miniconda`, `anaconda`, `virtualenv`, etc. Here, I demonstrate the procedure for `virtualenv`.
+
+First check if you have `virtualenv` installed using the command `virtualenv --version`. It should show the currently installed version, otherwise you have to install `virtualenv` according to your platform requirements. 
+
+If `python3` and `virtualenv` are already installed on your system, then go ahead and create a virtual enviroment called `electrans-venv` in the directory where you have downloaded this repo as follows:
+
+`
+$ virtualenv electrans-venv
+`
+
+Activate the virtual environment using the command:
+
+`
+$ source ./electrans-venv/bin/activate
+`
+
+You should see the prompt change accordingly. Then install `electrans` package in the virtual environment along with its dependencies using the following command:
+
+`
+(electrans-venv) $ pip install -e .
+`
+
+The command above installs the package in the current directory which is `electrans` in our case. Note that `electrans` also needs `vtk` library if you are interested in generating the 3D output which can be loaded in VTK compatible software like Paraview. However, it is not installed by default. If you need the VTK file outputs, install `vtk` as follows, otherwise skip this step:
+
+`
+(electrans-venv) $ pip install vtk=9.0.1
+`
+
+You are then ready to use `electrans` package in your python scripts or through command line, for example as:
+
+`
+(electrans-venv) $ python -m electrans -d ./data/
+`
+
+Finally, you can deactivate and exit the virtual environment as follows:
+
+`
+(electrans-venv) $ deactivate
+`
+
+We discuss the various ways to use this package in more detail below.
 
 ## Use as a python package
 After installation, the whole package can be imported in your python scripts using the command `import electrans`. However, in most cases only `from electrans import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams . See [`test_electrans.py`](test_electrans.py) for an example use case.
@@ -15,7 +56,7 @@ The package can also be imported in a Jupyter lab and notebook. See [`plot_trans
 After installation, the library can also be executed from command line as follows:
 
 `
-electrans [-h] [-p] [-q] [-d] [-a] [-s] [-av] [-sv] [-t THREADS] input_dir
+python -m electrans [-h] [-p] [-q] [-d] [-a] [-s] [-av] [-sv] [-t THREADS] input_dir
 `
 
 ### Positional arguments:

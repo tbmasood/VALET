@@ -13,6 +13,9 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/tbmasood/ElecTrans",
+    license="MIT",
+    platforms=["Unix", "MacOS", "Windows"],
+    install_requires=["numpy>=1.19.4", "matplotlib>=3.3.3", "cvxpy>=1.1.7"],
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
