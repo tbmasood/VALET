@@ -33,16 +33,16 @@ def test_example():
     from electrans import vtk_output_utils as vtk_out
 
     data = transition.hole_data
-    vtk_out.write_segmentation("dens_0_GS.vti", data.scalars, data.basis)
+    vtk_out.write_segmentation("hole_scalar_field.vti", data.scalars, data.basis)
     vtk_out.write_segmentation(
-        "dens_0_ES.vti", transition.particle_data.scalars, data.basis)
+        "particle_scalar_field.vti", transition.particle_data.scalars, data.basis)
     vtk_out.write_atoms("atoms.vtp", data.atoms, transition.hole_charges,
                         transition.particle_charges, atom_subgroup_map)
     vtk_out.write_segmentation(
-        "seg.vti", segment_arrays[0], data.basis, array_name="segment")
+        "seg_atomic.vti", segment_arrays[0], data.basis, array_name="segment")
     vtk_out.write_segments(
-        "seg.vtp", segment_arrays[0], data.basis, data.atoms)
-    vtk_out.write_subgroup_segments("seg_ligands.vtp", segment_arrays[0], data.basis, data.atoms, len(
+        "seg_atomic.vtp", segment_arrays[0], data.basis, data.atoms)
+    vtk_out.write_subgroup_segments("seg_subgroups.vtp", segment_arrays[0], data.basis, data.atoms, len(
         subgroup_names), atom_subgroup_map)
 
     print("All output VTK files written to disk ...")

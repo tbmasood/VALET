@@ -147,20 +147,20 @@ def read_atomic_charges(file_name):
         lines = chargeFile.readlines()
         hole_charges = []
         particle_charges = []
-        totalGSCharge = 0
-        totalESCharge = 0
-        for line in lines:
+        total_hole_charge = 0
+        total_particle_charge = 0
+        for line in lines[1:]:
             splitted = line.split(",")
-            gsCharge = float(splitted[0].strip())
-            hole_charges.append(gsCharge)
-            totalGSCharge = totalGSCharge + gsCharge
-            esCharge = float(splitted[1].strip())
-            particle_charges.append(esCharge)
-            totalESCharge = totalESCharge + esCharge
+            hole_charge = float(splitted[3].strip())
+            hole_charges.append(hole_charge)
+            totalGSCharge = totalGSCharge + hole_charge
+            particle_charge = float(splitted[4].strip())
+            particle_charges.append(particle_charge)
+            totalESCharge = totalESCharge + particle_charge
         for i in range(len(hole_charges)):
-            hole_charges[i] = hole_charges[i] / totalGSCharge
+            hole_charges[i] = hole_charges[i] / total_hole_charge
         for i in range(len(particle_charges)):
-            particle_charges[i] = particle_charges[i] / totalESCharge
+            particle_charges[i] = particle_charges[i] / total_particle_charge
         return (hole_charges, particle_charges)
 
 
