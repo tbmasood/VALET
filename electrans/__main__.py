@@ -18,6 +18,12 @@ def main():
                         help="If specified, Voronoi diagram will be computed for each cube "
                         "file separately. By default it is assumed, the atomic positions remain "
                         "the same for all the cube files.")
+    parser.add_argument("-q", "--use_quadratic_optimization",
+                        default=False,
+                        action='store_true',
+                        help="Use quadratic programming based optimization approach to compute "
+                        "the charge trasfer between subgroups. By default a hueristic approach "
+                        "is used for this purpose.")
     parser.add_argument("-d", "--output_transition_diagram",
                         default=False,
                         action='store_true',
@@ -37,8 +43,8 @@ def main():
     parser.add_argument("-av", "--output_atoms_vtk",
                         default=False,
                         action='store_true',
-                        help="If this option is set, the atoms are saved as 3D model in VTK. "
-                        "A file is generated for each transition and contains the data about "
+                        help="If this option is set, the atoms are saved as 3D model in VTK format. "
+                        "A file is generated for each transition which contains the data about "
                         "the hole and particle charge, charge difference, subgroup, etc. "
                         "These VTK files are saved in '<input_dir>/results/vtk/atoms/' and "
                         "can be loaded in VTK compatible software like Paraview.")
@@ -58,6 +64,7 @@ def main():
     args = parser.parse_args()
     input_dir = args.input_dir
     different_atom_pos = args.different_atom_pos
+    use_quadratic_optimization = args.use_quadratic_optimization
     threads = args.threads
     output_transition_diagram = args.output_transition_diagram
     output_atomic_charges = args.output_atomic_charges
@@ -158,7 +165,7 @@ def main():
         if output_subgroup_charges or output_transition_diagram:
             subgroup_info = tau.SubgroupInfo()
             subgroup_info.set_subgroups(subgroup_names, atom_subgroup_map)
-            tau.compute_subgroup_charges(transition, subgroup_info)
+            tau.compute_subgroup_charges(transition, subgroup_info, use_hueristic=not use_quadratic_optimization)
             if output_subgroup_charges:
                 output_file = input_dir + "results/subgroup_charges/" + \
                     "%s.txt" % transition_names[i]
