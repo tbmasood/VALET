@@ -172,7 +172,7 @@ def main():
                 subgroup_info.save_to_file(output_file)
             if output_transition_diagram:
                 output_file = input_dir + "results/transition_diagrams/" + \
-                    "%s.pdf" % transition_names[i]
+                    "%s.png" % transition_names[i]
                 tau.create_diagram(
                     subgroup_info, title=transition_names[i], show_plot=False, save_plot=True, file_name=output_file)
 

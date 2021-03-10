@@ -512,6 +512,11 @@ def create_diagram(subgroup_info, title="", show_plot=True, save_plot=False, fil
                 path, facecolor=colors[i % len(colors)], alpha=0.4, ec="none")
             ax.add_patch(patch)
 
+            if flow > 0.05:
+                percent = "%.2f%%" % (flow * 100)
+                plt.text((topXleft + topXright + bottomXleft + bottomXright)/ 4,
+                    yMiddle, percent, ha="center", family="monospace", size=10)
+
             propoFilledGS[i] = propoFilledGS[i] + flow
             propoFilledES[j] = propoFilledES[j] + flow
 
