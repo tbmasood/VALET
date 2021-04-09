@@ -135,17 +135,17 @@ def main():
         save_segmention=output_segmentation_vtk)
     print("Compted the Voronoi diagram based segmentation and atomic charges ...")
 
-    if output_subgroup_charges or output_transition_diagram:
-        subgroup_file = input_dir + "subgroups.txt"
-        if os.path.isfile(metadata_file):
-            subgroup_names, atom_subgroup_map = tau.load_subgroups(
-                subgroup_file)
-        else:
+    subgroup_file = input_dir + "subgroups.txt"
+    if os.path.isfile(metadata_file):
+        subgroup_names, atom_subgroup_map = tau.load_subgroups(
+            subgroup_file)
+    else:
+        if output_subgroup_charges or output_transition_diagram:
             print("Can't find subgroups.txt file in the input directory. "
-                  "The subgroup charges and transition diagrams will not be computed.")
-            output_subgroup_charges = output_transition_diagram = False
-            subgroup_names = []
-            atom_subgroup_map = [0] * transitions[0].num_atoms()
+                    "The subgroup charges and transition diagrams will not be computed.")
+        output_subgroup_charges = output_transition_diagram = False
+        subgroup_names = []
+        atom_subgroup_map = [0] * transitions[0].num_atoms()
 
     for i in range(len(transitions)):
         transition = transitions[i]
