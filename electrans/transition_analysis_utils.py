@@ -15,9 +15,8 @@ class ElectronicTransition:
         sumHoleCharges = sum(self.hole_charges)
         sumParticleCharges = sum(self.particle_charges)
         for i in range(self.num_atoms()):
-            self.hole_charges[i] = 2.0 * self.hole_charges[i] / sumHoleCharges
-            self.particle_charges[i] = 2.0 * \
-                self.particle_charges[i] / sumParticleCharges
+            self.hole_charges[i] = self.hole_charges[i] / sumHoleCharges
+            self.particle_charges[i] = self.particle_charges[i] / sumParticleCharges
 
 
 def load_transition(hole_cubefile: str, particle_cubefile: str):
