@@ -1,6 +1,22 @@
 # ElecTrans
 
-A python library for analysis of Natural Transition Orbitals (NTO) of molecules and molecular complexes. It supports computing electronic charges and charge transfer during electronic transitions at atomic as well as at subgroup level.
+A python library for analysis of Natural Transition Orbitals (NTO) of molecules and molecular complexes. It supports computing electronic charges and charge transfer during electronic transitions at atomic as well as at subgroup level. The methods implemented in this library are described in the following paper:
+
+Masood, T.B., Thygesen, S., Linares, M., Abrikosov, A.I., Natarajan, V. and Hotz, I. (2021), Visual Analysis of Electronic Densities and Transitions in Molecules. Computer Graphics Forum, 40: 287-298. [https://doi.org/10.1111/cgf.14307]
+
+```
+@article{MasoodCGF2021,
+    author = {Masood, T. Bin and Thygesen, S.S. and Linares, M. and Abrikosov, A. I. and Natarajan, V. and Hotz, I.},
+    title = {Visual Analysis of Electronic Densities and Transitions in Molecules},
+    journal = {Computer Graphics Forum},
+    volume = {40},
+    number = {3},
+    pages = {287-298},
+    doi = {https://doi.org/10.1111/cgf.14307},
+    url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/cgf.14307},
+    year = {2021}
+}
+```
 
 # Installation
 
