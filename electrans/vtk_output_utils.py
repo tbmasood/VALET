@@ -1,7 +1,7 @@
 def write_segmentation(output_file, segment_array, basis, array_name="density"):
     import vtk
     import numpy
-    from vtk.numpy_interface import dataset_adapter as dsa
+    from vtk.util.numpy_support import numpy_to_vtk
     
     size = segment_array.shape
     segment_array = segment_array.flatten('F')
@@ -10,7 +10,9 @@ def write_segmentation(output_file, segment_array, basis, array_name="density"):
     grid.SetOrigin(0, 0, 0)
     grid.SetSpacing(basis[0][0], basis[1][1], basis[2][2])
     grid.SetDimensions(size)
-    grid.GetPointData().SetScalars(dsa.numpyTovtkDataArray(segment_array, array_name))
+    arrVTK = numpy_to_vtk(segment_array, deep=True)
+    arrVTK.SetName(array_name)
+    grid.GetPointData().SetScalars(arrVTK)
 
     writer = vtk.vtkXMLImageDataWriter()
     writer.SetFileName(output_file)
@@ -97,7 +99,7 @@ def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgrou
 def write_segments(output_file, segment_array, basis, atoms):
     import vtk
     import numpy
-    from vtk.numpy_interface import dataset_adapter as dsa
+    from vtk.util.numpy_support import numpy_to_vtk
     from scipy.ndimage.filters import gaussian_filter
     
     size = segment_array.shape
@@ -127,7 +129,9 @@ def write_segments(output_file, segment_array, basis, atoms):
         selected = numpy.where(segment_array == i, mask, 0)
         selected = gaussian_filter(selected, sigma=0.4)
         selected = selected.flatten('F')
-        grid.GetPointData().SetScalars(dsa.numpyTovtkDataArray(selected, "seg"))
+        arrVTK = numpy_to_vtk(selected, deep=True)
+        arrVTK.SetName("seg")
+        grid.GetPointData().SetScalars(arrVTK)
 
         surface = vtk.vtkMarchingCubes()
         surface.SetInputData(grid)
@@ -154,7 +158,7 @@ def write_segments(output_file, segment_array, basis, atoms):
 def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgroups, atom_subgroup_map):
     import vtk
     import numpy
-    from vtk.numpy_interface import dataset_adapter as dsa
+    from vtk.util.numpy_support import numpy_to_vtk
     from scipy.ndimage.filters import gaussian_filter
     
     size = segment_array.shape
@@ -188,7 +192,9 @@ def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgro
 
         selected = gaussian_filter(selected, sigma=0.4)
         selected = selected.flatten('F')
-        grid.GetPointData().SetScalars(dsa.numpyTovtkDataArray(selected, "seg"))
+        arrVTK = numpy_to_vtk(selected, deep=True)
+        arrVTK.SetName("seg")
+        grid.GetPointData().SetScalars(arrVTK)
 
         surface = vtk.vtkMarchingCubes()
         surface.SetInputData(grid)
