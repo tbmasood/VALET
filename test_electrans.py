@@ -1,4 +1,4 @@
-from electrans import transition_analysis_utils as tau
+from valet import transition_analysis_utils as tau
 
 
 def test_example():
@@ -30,7 +30,7 @@ def test_example():
     tau.create_diagram(subgroup_info, title="TQ (State 1)")
 
     # Output VTK files
-    from electrans import vtk_output_utils as vtk_out
+    from valet import vtk_output_utils as vtk_out
 
     data = transition.hole_data
     vtk_out.write_segmentation("hole_scalar_field.vti", data.scalars, data.basis)
