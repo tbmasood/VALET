@@ -49,19 +49,13 @@ You should see the prompt change accordingly. Then install `valet` package in th
 The command above installs the package in the current directory which is `valet` in our case. Note that `valet` also needs `vtk` library if you are interested in generating the 3D output which can be loaded in VTK compatible software like Paraview. However, it is not installed by default. If you need the VTK file outputs, install `vtk` as follows, otherwise skip this step:
 
 `
-(valet-venv) $ python -m pip install -e .\[vis\]
+(valet-venv) $ python -m pip install -e .[vis]
 `
 
 You are then ready to use `valet` package in your python scripts or through command line, for example as:
 
 `
 (valet-venv) $ valet -d ./data/
-`
-
-If you want to use VALET within Jupyter notebook, you can use the following installation option:
-
-`
-(valet-venv) $ python -m pip install -e .\[jupyter\]
 `
 
 Finally, you can deactivate and exit the virtual environment as follows:
@@ -77,6 +71,17 @@ After installation, the whole package can be imported in your python scripts usi
 
 ## Using through Jupyter notebook
 The package can also be imported in a Jupyter lab and notebook. See [`plot_transition_diagram.ipynb`](plot_transition_diagram.ipynb) for an example use case. 
+
+You can change the installation option to automatically install Jupyter lab in your virtual environment as follows:
+
+`
+(valet-venv) $ python -m pip install -e .[jupyter]
+`
+Then launch jupyter lab:
+`
+(valet-venv) $ jupyter-lab
+`
+
 
 ## Command line execution
 After installation, the library can also be executed from command line as follows:
