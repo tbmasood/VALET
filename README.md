@@ -43,19 +43,25 @@ $ source ./valet-venv/bin/activate
 You should see the prompt change accordingly. Then install `valet` package in the virtual environment along with its dependencies using the following command:
 
 `
-(valet-venv) $ pip install -e .
+(valet-venv) $ python -m pip install -e .
 `
 
 The command above installs the package in the current directory which is `valet` in our case. Note that `valet` also needs `vtk` library if you are interested in generating the 3D output which can be loaded in VTK compatible software like Paraview. However, it is not installed by default. If you need the VTK file outputs, install `vtk` as follows, otherwise skip this step:
 
 `
-(valet-venv) $ pip install vtk==9.0.1
+(valet-venv) $ python -m pip install -e .\[vis\]
 `
 
 You are then ready to use `valet` package in your python scripts or through command line, for example as:
 
 `
-(valet-venv) $ python -m valet -d ./data/
+(valet-venv) $ valet -d ./data/
+`
+
+If you want to use VALET within Jupyter notebook, you can use the following installation option:
+
+`
+(valet-venv) $ python -m pip install -e .\[jupyter\]
 `
 
 Finally, you can deactivate and exit the virtual environment as follows:
