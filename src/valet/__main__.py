@@ -133,7 +133,7 @@ def main():
     segment_arrays = tau.compute_atomic_charges(
         transitions, num_threads=threads, same_atomic_positions=not different_atom_pos,
         save_segmention=output_segmentation_vtk)
-    print("Compted the Voronoi diagram based segmentation and atomic charges ...")
+    print("Computed the Voronoi diagram based segmentation and atomic charges ...")
 
     subgroup_file = input_dir + "subgroups.txt"
     if os.path.isfile(metadata_file):
