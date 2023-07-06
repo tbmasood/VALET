@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "VALET"
-version = "0.0.1"
+version = "0.0.3"
 description = "A library for computing electronic charges and charge transfer in electronic transition using Natural Transition Orbitals"
 readme = "README.md"
 authors = [{ name = "Talha Bin Masood", email = "talha.bin.masood@liu.se" }]
@@ -19,15 +19,15 @@ classifiers = [
 ]
 keywords = ["electronic transitions", "cube files", "NTO", "Orbital", "Comparison", "Visualization", "Visual analysis"]
 dependencies = [
-    "numpy>=1.19.4", 
-    "matplotlib>=3.3.3", 
-    "cvxpy>=1.1.7",
+    "numpy>=1.20.0",
+    "matplotlib",
+    "cvxpy",
 ]
 requires-python = ">=3.6"
 
 [project.optional-dependencies]
-vis = ["vtk>=9.0.1"]
-jupyter = ["vtk>=9.0.1", "jupyterlab", "ipympl"]
+vis = ["vtk>=9.1.0"]
+jupyter = ["vtk>=9.1.0", "jupyterlab", "ipympl"]
 
 [project.urls]
 Homepage = "https://github.com/tbmasood/VALET"

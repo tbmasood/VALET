@@ -22,7 +22,7 @@ from vtkmodules.vtkIOXML import (
     vtkXMLPolyDataWriter
 )
 
-from vtk.util.numpy_support import numpy_to_vtk
+from vtkmodules.util.numpy_support import numpy_to_vtk
 
 def write_segmentation(output_file, segment_array, basis, array_name="density"):
     size = segment_array.shape
