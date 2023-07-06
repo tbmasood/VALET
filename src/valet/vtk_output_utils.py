@@ -1,12 +1,34 @@
+from vtkmodules.vtkCommonCore import (
+    vtkPoints,
+    vtkIntArray,
+    vtkFloatArray
+)
+
+from vtkmodules.vtkFiltersCore import (
+    vtkMarchingCubes,
+    vtkCleanPolyData,
+    vtkAppendPolyData
+)
+
+from vtkmodules.vtkCommonDataModel import (
+    vtkImageData,
+    vtkPolyData,
+    vtkCellArray,
+    vtkLine
+)
+
+from vtkmodules.vtkIOXML import (
+    vtkXMLImageDataWriter,
+    vtkXMLPolyDataWriter
+)
+
+from vtk.util.numpy_support import numpy_to_vtk
+
 def write_segmentation(output_file, segment_array, basis, array_name="density"):
-    import vtk
-    import numpy
-    from vtk.util.numpy_support import numpy_to_vtk
-    
     size = segment_array.shape
     segment_array = segment_array.flatten('F')
 
-    grid = vtk.vtkImageData()
+    grid = vtkImageData()
     grid.SetOrigin(0, 0, 0)
     grid.SetSpacing(basis[0][0], basis[1][1], basis[2][2])
     grid.SetDimensions(size)
@@ -14,32 +36,30 @@ def write_segmentation(output_file, segment_array, basis, array_name="density"):
     arrVTK.SetName(array_name)
     grid.GetPointData().SetScalars(arrVTK)
 
-    writer = vtk.vtkXMLImageDataWriter()
+    writer = vtkXMLImageDataWriter()
     writer.SetFileName(output_file)
     writer.SetInputData(grid)
     writer.Write()
 
 
 def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgroup_map):
-    import vtk
-    import numpy
     from . import atomic_data as atomic_data
 
-    pointsArr = vtk.vtkPoints()
-    atomTypesArr = vtk.vtkIntArray()
+    pointsArr = vtkPoints()
+    atomTypesArr = vtkIntArray()
     atomTypesArr.SetName("atom_type")
-    atomRadiusArr = vtk.vtkFloatArray()
+    atomRadiusArr = vtkFloatArray()
     atomRadiusArr.SetName("atom_radius")
-    atomColorArr = vtk.vtkFloatArray()
+    atomColorArr = vtkFloatArray()
     atomColorArr.SetName("atom_color")
     atomColorArr.SetNumberOfComponents(3)
-    atomHoleChargeArr = vtk.vtkFloatArray()
+    atomHoleChargeArr = vtkFloatArray()
     atomHoleChargeArr.SetName("hole_charge")
-    atomParticleChargeArr = vtk.vtkFloatArray()
+    atomParticleChargeArr = vtkFloatArray()
     atomParticleChargeArr.SetName("particle_charge")
-    atomChargeDiffArr = vtk.vtkFloatArray()
+    atomChargeDiffArr = vtkFloatArray()
     atomChargeDiffArr.SetName("charge_diff")
-    atomSubgroupArr = vtk.vtkIntArray()
+    atomSubgroupArr = vtkIntArray()
     atomSubgroupArr.SetName("subgroup")
     for atom in atoms:
         x = atom.coordinates[0]
@@ -57,7 +77,7 @@ def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgrou
         atomSubgroupArr.InsertNextTuple1(atom_subgroup_map[atom.id])
 
     # Add bonds
-    bondsArr = vtk.vtkCellArray()
+    bondsArr = vtkCellArray()
     for i in range(len(atoms)):
         xi = atoms[i].coordinates[0]
         yi = atoms[i].coordinates[1]
@@ -73,12 +93,12 @@ def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgrou
             zDiff = zi - zj
             dist = xDiff * xDiff + yDiff * yDiff + zDiff * zDiff
             if dist < 0.4 * (radius_i + radius_j) * (radius_i + radius_j):
-                bond = vtk.vtkLine()
+                bond = vtkLine()
                 bond.GetPointIds().SetId(0, i)
                 bond.GetPointIds().SetId(1, j)
                 bondsArr.InsertNextCell(bond)
 
-    polydata = vtk.vtkPolyData()
+    polydata = vtkPolyData()
     polydata.SetPoints(pointsArr)
     polydata.SetLines(bondsArr)
     polydata.GetPointData().AddArray(atomTypesArr)
@@ -90,16 +110,14 @@ def write_atoms(output_file, atoms, hole_charges, particle_charges, atom_subgrou
     polydata.GetPointData().AddArray(atomSubgroupArr)
     polydata.Modified()
 
-    writer = vtk.vtkXMLPolyDataWriter()
+    writer = vtkXMLPolyDataWriter()
     writer.SetFileName(output_file)
     writer.SetInputData(polydata)
     writer.Write()
 
 
 def write_segments(output_file, segment_array, basis, atoms):
-    import vtk
     import numpy
-    from vtk.util.numpy_support import numpy_to_vtk
     from scipy.ndimage.filters import gaussian_filter
     
     size = segment_array.shape
@@ -118,12 +136,12 @@ def write_segments(output_file, segment_array, basis, atoms):
                         mask[x][y][z] = 1
                         break
 
-    grid = vtk.vtkImageData()
+    grid = vtkImageData()
     grid.SetOrigin(0, 0, 0)
     grid.SetSpacing(basis[0][0], basis[1][1], basis[2][2])
     grid.SetDimensions(size)
 
-    appendedData = vtk.vtkAppendPolyData()
+    appendedData = vtkAppendPolyData()
 
     for i in range(len(atoms)):
         selected = numpy.where(segment_array == i, mask, 0)
@@ -133,7 +151,7 @@ def write_segments(output_file, segment_array, basis, atoms):
         arrVTK.SetName("seg")
         grid.GetPointData().SetScalars(arrVTK)
 
-        surface = vtk.vtkMarchingCubes()
+        surface = vtkMarchingCubes()
         surface.SetInputData(grid)
         surface.ComputeNormalsOn()
         surface.SetValue(0, 0.4)
@@ -145,11 +163,11 @@ def write_segments(output_file, segment_array, basis, atoms):
         appendedData.AddInputData(surface.GetOutput())
         appendedData.Update()
 
-    cleanFilter = vtk.vtkCleanPolyData()
+    cleanFilter = vtkCleanPolyData()
     cleanFilter.SetInputConnection(appendedData.GetOutputPort())
     cleanFilter.Update()
 
-    writer = vtk.vtkXMLPolyDataWriter()
+    writer = vtkXMLPolyDataWriter()
     writer.SetFileName(output_file)
     writer.SetInputData(cleanFilter.GetOutput())
     writer.Write()

@@ -77,11 +77,12 @@ You can change the installation option to automatically install Jupyter lab in y
 `
 (valet-venv) $ python -m pip install -e .[jupyter]
 `
+
 Then launch jupyter lab:
+
 `
 (valet-venv) $ jupyter-lab
 `
-
 
 ## Command line execution
 After installation, the library can also be executed from command line as follows:

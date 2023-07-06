@@ -1,0 +1,40 @@
+{% set name = "valet" %}
+{% set version = "0.0.1" %}
+
+package:
+  name: "{{ name|lower }}"
+  version: "{{ version }}"
+
+source:
+  git_url: https://github.com/tbmasood/VALET.git
+  git_rev: v0.0.1
+
+build:
+  number: 0
+  noarch: python
+  script: "{{ PYTHON }} -m pip install .[vis] -vv "
+
+requirements:
+  host:
+    - pip
+    - python>=3.6
+  run:
+    - numpy>=1.19.4
+    - matplotlib>=3.3.3
+    - cvxpy>=1.1.7
+    - vtk>=9.0.1
+    - python>=3.6
+
+test:
+  imports:
+    - valet
+
+about:
+  home: https://github.com/tbmasood/VALET
+  license: MIT
+  license_family: MIT
+  summary: A library for computing electronic charges and charge transfer in electronic transition using Natural Transition Orbitals
+  
+extra:
+  recipe-maintainers:
+    - tbmasood
