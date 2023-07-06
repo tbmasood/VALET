@@ -1,12 +1,8 @@
-name: valet-env
+name: valet-venv
 channels:
   - conda-forge
   - defaults
+  - tbmasood
 dependencies:
   - python>=3.6
-  - numpy>=1.20.0
-  - matplotlib>=3.3.3
-  - cvxpy>=1.1.7
-  - vtk>=9.1.0
-  - jupyterlab
-  - ipympl
+  - valet

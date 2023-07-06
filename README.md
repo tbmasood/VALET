@@ -1,5 +1,13 @@
 # VALET: Visual Analysis of Electronic Transitions
 
+[![Anaconda](https://anaconda.org/tbmasood/valet/badges/version.svg)](https://anaconda.org/tbmasood/valet/badges/version.svg)
+[![release_date](https://anaconda.org/tbmasood/valet/badges/latest_release_date.svg)](https://anaconda.org/tbmasood/valet/badges/latest_release_date.svg)
+[![Platforms](https://anaconda.org/tbmasood/valet/badges/platforms.svg)](https://anaconda.org/tbmasood/valet/badges/platforms.svg)
+[![license](https://anaconda.org/tbmasood/valet/badges/license.svg)](https://anaconda.org/tbmasood/valet/badges/license.svg)
+[![downloads](https://anaconda.org/tbmasood/valet/badges/downloads.svg)](https://anaconda.org/tbmasood/valet/badges/downloads.svg)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tbmasood/VALET/HEAD)
+
+
 A python library for analysis of Natural Transition Orbitals (NTO) of molecules and molecular complexes. It supports computing electronic charges and charge transfer during electronic transitions at atomic as well as at subgroup level. The methods implemented in this library are described in the following paper:
 
 Masood, T.B., Thygesen, S., Linares, M., Abrikosov, A.I., Natarajan, V. and Hotz, I. (2021), Visual Analysis of Electronic Densities and Transitions in Molecules. Computer Graphics Forum, 40: 287-298. [https://doi.org/10.1111/cgf.14307]
