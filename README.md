@@ -1,10 +1,10 @@
 # VALET: Visual Analysis of Electronic Transitions
 
-[![Anaconda](https://anaconda.org/tbmasood/valet/badges/version.svg)](https://anaconda.org/tbmasood/valet/badges/version.svg)
-[![release_date](https://anaconda.org/tbmasood/valet/badges/latest_release_date.svg)](https://anaconda.org/tbmasood/valet/badges/latest_release_date.svg)
-[![Platforms](https://anaconda.org/tbmasood/valet/badges/platforms.svg)](https://anaconda.org/tbmasood/valet/badges/platforms.svg)
-[![license](https://anaconda.org/tbmasood/valet/badges/license.svg)](https://anaconda.org/tbmasood/valet/badges/license.svg)
-[![downloads](https://anaconda.org/tbmasood/valet/badges/downloads.svg)](https://anaconda.org/tbmasood/valet/badges/downloads.svg)
+[![Anaconda](https://anaconda.org/tbmasood/valet/badges/version.svg)](https://anaconda.org/tbmasood/valet)
+[![release_date](https://anaconda.org/tbmasood/valet/badges/latest_release_date.svg)](https://anaconda.org/tbmasood/valet)
+[![Platforms](https://anaconda.org/tbmasood/valet/badges/platforms.svg)](https://anaconda.org/tbmasood/valet)
+[![image](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![downloads](https://anaconda.org/tbmasood/valet/badges/downloads.svg)](https://anaconda.org/tbmasood/valet)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/tbmasood/VALET/HEAD)
 
 
@@ -28,7 +28,37 @@ Masood, T.B., Thygesen, S., Linares, M., Abrikosov, A.I., Natarajan, V. and Hotz
 
 # Installation
 
-I recommend using a virtual environment to install this package and its dependencies. You can use environments like `miniconda`, `anaconda`, `virtualenv`, etc. Here, I demonstrate the procedure for `virtualenv`.
+## Anaconda
+
+Use the provided `enviroment.yml` file to create the conda environment as follows:
+
+`
+$ conda env create -f environment.yml
+`
+
+Activate the environment 
+
+`
+$ conda activate valet-venv
+`
+
+You should see the prompt change accordingly. Then `valet` is ready to be used within the environment.
+
+`
+(valet-venv) $ valet -d ./data/
+`
+
+Finally, you can deactivate and exit as follows:
+
+`
+(valet-venv) $ conda deactivate
+`
+
+
+## Build and install with `virtualenv`
+
+
+The conda approach earlier uses a pre-build conda package for `valet` uploaded on [anaconda.org](https://anaconda.org/tbmasood/valet). However, you can also build directly from the sources provided here yourself. I demonstrate the procedure for `virtualenv`.
 
 First check if you have `virtualenv` installed using the command `virtualenv --version`. It should show the currently installed version. Otherwise you have to install `virtualenv` according to your platform requirements or use `pip` to install `virtualenv` locally using the following command. I recommend the latter option for installing `virtualenv`.
 
@@ -54,7 +84,7 @@ You should see the prompt change accordingly. Then install `valet` package in th
 (valet-venv) $ python -m pip install -e .
 `
 
-The command above installs the package in the current directory which is `valet` in our case. Note that `valet` also needs `vtk` library if you are interested in generating the 3D output which can be loaded in VTK compatible software like Paraview. However, it is not installed by default. If you need the VTK file outputs, install `vtk` as follows, otherwise skip this step:
+The command above installs the package in the current directory which is `valet` in our case. Note that `valet` also needs `vtk` library if you are interested in generating the 3D output which can be loaded in VTK compatible software like Paraview. However, it is not installed by default. If you need the VTK file outputs, install `vtk` as follows:
 
 `
 (valet-venv) $ python -m pip install -e .[vis]
@@ -72,15 +102,22 @@ Finally, you can deactivate and exit the virtual environment as follows:
 (valet-venv) $ deactivate
 `
 
+# Using the package
 We discuss the various ways to use this package in more detail below.
 
 ## Use as a python package
-After installation, the whole package can be imported in your python scripts using the command `import valet`. However, in most cases only `from valet import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams . See [`test_valet.py`](test_valet.py) for an example use case.
+After installation, the whole package can be imported in your python scripts using the command `import valet`. However, in most cases only `from valet import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams. See [`test_valet.py`](test_valet.py) for an example use case.
 
 ## Using through Jupyter notebook
-The package can also be imported in a Jupyter lab and notebook. See [`plot_transition_diagram.ipynb`](plot_transition_diagram.ipynb) for an example use case. 
+The package can also be imported in a Jupyter lab and notebook. See [`plot_transition_diagram.ipynb`](plot_transition_diagram.ipynb) for an example use case.
 
-You can change the installation option to automatically install Jupyter lab in your virtual environment as follows:
+If you are using `conda`, `enviroment.yml` already includes `jupyterlab` and `ipympl` packages, so you can just launch it as:
+
+`
+(valet-venv) $ jupyter-lab
+`
+
+If you are using `virtualenv`, you can change the installation option to automatically install Jupyter lab in your virtual environment as follows:
 
 `
 (valet-venv) $ python -m pip install -e .[jupyter]
@@ -97,6 +134,12 @@ After installation, the library can also be executed from command line as follow
 
 `
 python -m valet [-h] [-p] [-q] [-d] [-a] [-s] [-av] [-sv] [-t THREADS] input_dir
+`
+
+Or, simply as:
+
+`
+valet [-h] [-p] [-q] [-d] [-a] [-s] [-av] [-sv] [-t THREADS] input_dir
 `
 
 ### Positional arguments:
