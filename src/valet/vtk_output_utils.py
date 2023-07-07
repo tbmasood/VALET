@@ -174,9 +174,7 @@ def write_segments(output_file, segment_array, basis, atoms):
 
 
 def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgroups, atom_subgroup_map):
-    import vtk
     import numpy
-    from vtk.util.numpy_support import numpy_to_vtk
     from scipy.ndimage.filters import gaussian_filter
     
     size = segment_array.shape
@@ -195,12 +193,12 @@ def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgro
                         mask[x][y][z] = 1
                         break
 
-    grid = vtk.vtkImageData()
+    grid = vtkImageData()
     grid.SetOrigin(0, 0, 0)
     grid.SetSpacing(basis[0][0], basis[1][1], basis[2][2])
     grid.SetDimensions(size)
 
-    appendedData = vtk.vtkAppendPolyData()
+    appendedData = vtkAppendPolyData()
 
     for i in range(num_subgroups):
         selected = numpy.zeros(size)
@@ -214,7 +212,7 @@ def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgro
         arrVTK.SetName("seg")
         grid.GetPointData().SetScalars(arrVTK)
 
-        surface = vtk.vtkMarchingCubes()
+        surface = vtkMarchingCubes()
         surface.SetInputData(grid)
         surface.ComputeNormalsOn()
         surface.SetValue(0, 0.4)
@@ -226,11 +224,11 @@ def write_subgroup_segments(output_file, segment_array, basis, atoms, num_subgro
         appendedData.AddInputData(surface.GetOutput())
         appendedData.Update()
 
-    cleanFilter = vtk.vtkCleanPolyData()
+    cleanFilter = vtkCleanPolyData()
     cleanFilter.SetInputConnection(appendedData.GetOutputPort())
     cleanFilter.Update()
 
-    writer = vtk.vtkXMLPolyDataWriter()
+    writer = vtkXMLPolyDataWriter()
     writer.SetFileName(output_file)
     writer.SetInputData(cleanFilter.GetOutput())
     writer.Write()

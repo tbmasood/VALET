@@ -58,7 +58,7 @@ Finally, you can deactivate and exit as follows:
 ## Build and install with `virtualenv`
 
 
-The conda approach earlier uses a pre-build conda package for `valet` uploaded on [anaconda.org](https://anaconda.org/tbmasood/valet). However, you can also build directly from the sources provided here yourself. I demonstrate the procedure for `virtualenv`.
+The conda approach described earlier uses a pre-built conda package for `valet` uploaded on [anaconda.org](https://anaconda.org/tbmasood/valet). However, you can also build yourself directly from the sources provided here. I demonstrate the procedure for `virtualenv`.
 
 First check if you have `virtualenv` installed using the command `virtualenv --version`. It should show the currently installed version. Otherwise you have to install `virtualenv` according to your platform requirements or use `pip` to install `virtualenv` locally using the following command. I recommend the latter option for installing `virtualenv`.
 
@@ -103,7 +103,7 @@ Finally, you can deactivate and exit the virtual environment as follows:
 `
 
 # Using the package
-We discuss the various ways to use this package in more detail below.
+The various ways of using this package are described in more detail below.
 
 ## Use as a python package
 After installation, the whole package can be imported in your python scripts using the command `import valet`. However, in most cases only `from valet import transition_analysis_utils as tau` would be enough as this conatins all the utility fuctions required for charge computation and creating transition diagrams. See [`test_valet.py`](test_valet.py) for an example use case.

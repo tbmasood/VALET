@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "VALET"
-version = "0.0.3"
+version = "0.0.4"
 description = "A library for computing electronic charges and charge transfer in electronic transition using Natural Transition Orbitals"
 readme = "README.md"
 authors = [{ name = "Talha Bin Masood", email = "talha.bin.masood@liu.se" }]
