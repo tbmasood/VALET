@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://github.com/tbmasood/VALET/assets/38646069/4d1a9bdb-4b0a-4f5b-99e0-2229be2efc2d" alt="This is an overview of the VALET software" width="400"/>
+</p>
+
 # VALET: Visual Analysis of Electronic Transitions
 
 [![Anaconda](https://anaconda.org/tbmasood/valet/badges/version.svg)](https://anaconda.org/tbmasood/valet)
